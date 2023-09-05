@@ -13,9 +13,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	char preKeys[256] = {0};
 
 	//マウスカーソル非表示とフルスクリーン化(事故防止のため最後に有効化)
-	//ShowCursor(FALSE);
-	//Novice::SetWindowMode(kFullscreen);
-
+	ShowCursor(FALSE);
 
 	//シーン
 	enum Scene { title, setumei, game, clear };
@@ -33,7 +31,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int GoalEfect1 = Novice::LoadTexture("./image/GoalEfect1.png");
 	int GoalEfect2 = Novice::LoadTexture("./image/GoalEfect2.png");
 	int GoalEfect3 = Novice::LoadTexture("./image/GoalEfect3.png");
-
 
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
