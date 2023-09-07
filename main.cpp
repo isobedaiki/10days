@@ -20,8 +20,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int posPXtmp = 0;
 	int posPYtmp = 0;
 	int isPlayerAlive = 1;
+
+	//タイトルフレーム
 	int animCounter = 0;
 	int frameCounter = 0;
+
+	//クリアフレーム
+	int animCounter2 = 0;
+	int frameCounter2 = 0;
+
 
 	int player2Posx = 32;
 	int player2Posy = 64;
@@ -81,12 +88,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//画面読み込み↓
 	
 	//背景画像
-	int Haikei = Novice::LoadTexture("./image/GameHaikei.png");
+	int Haikei = Novice::LoadTexture("./image/BgTex.png");
 
 	//ゴールエフェクト画像
 	int GoalEfect1 = Novice::LoadTexture("./image/GoalEfect1.png");
 	int GoalEfect2 = Novice::LoadTexture("./image/GoalEfect2.png");
 	int GoalEfect3 = Novice::LoadTexture("./image/GoalEfect3.png");
+
+	//プレイヤー画像
+	int RedPlayer = Novice::LoadTexture("./image/RedPlayer.png");
+	int BluePlayer = Novice::LoadTexture("./image/BruePlayer.png");
+	int GreenPlayer = Novice::LoadTexture("./image/GreenPlayer.png");
+	
 
     //タイトル画像
 	int TitleAnimTex[12] = {
@@ -104,6 +117,26 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Novice::LoadTexture("./image/Title11.png"),
 		Novice::LoadTexture("./image/Title12.png")
 	};
+
+	//クリア画面
+	int ClearAnimTex[12] = {
+
+		Novice::LoadTexture("./image/GameClearTex1.png"),
+		Novice::LoadTexture("./image/GameClearTex2.png"),
+		Novice::LoadTexture("./image/GameClearTex3.png"),
+		Novice::LoadTexture("./image/GameClearTex4.png"),
+		Novice::LoadTexture("./image/GameClearTex5.png"),
+		Novice::LoadTexture("./image/GameClearTex6.png"),
+		Novice::LoadTexture("./image/GameClearTex7.png"),
+		Novice::LoadTexture("./image/GameClearTex8.png"),
+		Novice::LoadTexture("./image/GameClearTex9.png"),
+		Novice::LoadTexture("./image/GameClearTex9.png"),
+		Novice::LoadTexture("./image/GameClearTex9.png"),
+		Novice::LoadTexture("./image/GameClearTex9.png"),
+	};
+
+	//壁ブロックの画像
+	int WallTex = Novice::LoadTexture("./image/WallTex.png");
 
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
@@ -302,11 +335,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			for (int y = 0; y < mapCountY; y++) {
 				for (int x = 0; x < mapCountX; x++) {
 					if (map[y][x] == BLOCK) {
-						Novice::DrawBox(x * blockSize, y * blockSize, 32, 32, 0.0f, WHITE,
-							kFillModeWireFrame);
-					}
-					if (map[y][x] == BG) {
-						Novice::DrawBox(x * blockSize, y * blockSize, 32, 32, 0.0f, BLACK, kFillModeSolid);
+						Novice::DrawSprite(x* blockSize, y* blockSize, WallTex, 1, 1, 0.0f, WHITE);
 					}
 					if (map[y][x] == diagonal) {
 						Novice::DrawBox(x * blockSize, y * blockSize, 32, 32, 0.0f, 0xFFFF00FF, kFillModeSolid);
@@ -322,12 +351,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 
 			if (isPlayerAlive == 1) {
-				Novice::DrawBox(playerPosx, playerPosy, 32, 32, 0.0f, RED, kFillModeSolid);
+				Novice::DrawSprite(playerPosx, playerPosy, RedPlayer, 1, 1, 0.0f, WHITE);
 			}
 
 			if (isPlayerAlive2 == 1) {
-				Novice::DrawBox(player2Posx, player2Posy, 32, 32, 0.0f, GREEN, kFillModeWireFrame);
+				Novice::DrawSprite(player2Posx, player2Posy, BluePlayer, 1, 1, 0.0f, WHITE);
 			}
+
+			//三体目の自機
+			Novice::DrawSprite(0, 0, GreenPlayer, 1, 1, 0.0f, WHITE);
 
 		///
 		/// ↑描画処理ここまで
@@ -342,8 +374,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		case clear:
 
+			frameCounter2++;
+			if (frameCounter2 % 10 == 0) {
+				animCounter2++;
+			}
+
+			if (animCounter2 >= 12) {
+				animCounter2 = 0;
+			}
+
 			//クリア画像
-			Novice::DrawBox(0, 0, 800, 640, 0.0f, GREEN, kFillModeSolid);
+			Novice::DrawSprite(0, 0, ClearAnimTex[animCounter2], 1, 1, 0.0f, WHITE);
 
 			//シーン切り替え
 			if (keys[DIK_SPACE] != 0 && preKeys[DIK_SPACE] == 0) {
