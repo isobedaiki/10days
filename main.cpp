@@ -20,6 +20,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int posPXtmp = 0;
 	int posPYtmp = 0;
 	int isPlayerAlive = 1;
+	int animCounter = 0;
+	int frameCounter = 0;
 
 	int player2Posx = 32;
 	int player2Posy = 64;
@@ -67,7 +69,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 	//マウスカーソル非表示とフルスクリーン化(事故防止のため最後に有効化)
-	ShowCursor(FALSE);
+	//ShowCursor(FALSE);
 
 	//シーン
 	enum Scene { title, setumei, game, clear };
@@ -86,6 +88,23 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int GoalEfect2 = Novice::LoadTexture("./image/GoalEfect2.png");
 	int GoalEfect3 = Novice::LoadTexture("./image/GoalEfect3.png");
 
+    //タイトル画像
+	int TitleAnimTex[12] = {
+
+		Novice::LoadTexture("./image/Title1.png"),
+		Novice::LoadTexture("./image/Title2.png"),
+		Novice::LoadTexture("./image/Title3.png"),
+		Novice::LoadTexture("./image/Title4.png"),
+		Novice::LoadTexture("./image/Title5.png"),
+		Novice::LoadTexture("./image/Title6.png"),
+		Novice::LoadTexture("./image/Title7.png"),
+		Novice::LoadTexture("./image/Title8.png"),
+		Novice::LoadTexture("./image/Title9.png"),
+		Novice::LoadTexture("./image/Title10.png"),
+		Novice::LoadTexture("./image/Title11.png"),
+		Novice::LoadTexture("./image/Title12.png")
+	};
+
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
 		// フレームの開始
@@ -99,15 +118,26 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓更新処理ここから
 		///
 
+
 		switch (scene){
 		case title:
 
+			frameCounter++;
+			if (frameCounter % 5 == 0) {
+				animCounter++;
+			}
+
+			if (animCounter >= 12) {
+				animCounter = 0;
+			}
+
 			//タイトル画像
-			Novice::DrawBox(0, 0, 800, 640, 0.0f, RED, kFillModeSolid);
+			Novice::DrawSprite(0, 0, TitleAnimTex[animCounter], 1, 1, 0.0f, WHITE);
 
 			//シーン切り替え
 			if (keys[DIK_SPACE] != 0 && preKeys[DIK_SPACE] == 0) {
 				scene = setumei;
+				frameCounter = 0;
 			}
 
 			break;
