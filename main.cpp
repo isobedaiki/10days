@@ -35,6 +35,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//ゴールフレーム
 	int animCounter3 = 0;
 	int frameCounter3 = 0;
+	int animCounter4 = 0;
+	int frameCounter4 = 0;
 
 	//青
 	int player2Posx = 64;
@@ -251,11 +253,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			//背景画像
 			Novice::DrawSprite(0, 0, Haikei, 1, 1, 0.0f, WHITE);
-
-			//ゴールエフェクト(エラー対策の仮置き)
-			/*Novice::DrawSprite(0, 0, GoalEfect1, 1, 1, 0.0f, WHITE);
-			Novice::DrawSprite(32, 0, GoalEfect2, 1, 1, 0.0f, WHITE);
-			Novice::DrawSprite(64, 0, GoalEfect3, 1, 1, 0.0f, WHITE);*/
 
 			if (keys[DIK_R] && preKeys[DIK_R] == 0) {
 
@@ -639,6 +636,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//------------------------------------------------------------------------------------------------------------------------------//
 			case game2:
 
+				frameCounter4++;
+				if (frameCounter4 % 10 == 0) {
+					animCounter4++;
+				}
+
+				if (animCounter4 >= 3) {
+					animCounter4 = 0;
+				}
+
+
 				if (keys[DIK_R] && preKeys[DIK_R] == 0) {
 
 					//赤
@@ -944,7 +951,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 							Novice::DrawSprite(x * blockSize, y * blockSize, WallTex, 1, 1, 0.0f, WHITE);
 						}
 						if (map2[y][x] == GOAL) {
-							Novice::DrawSprite(x * blockSize, y * blockSize, GoalAnimTex[animCounter3], 1, 1, 0.0f, WHITE);
+							Novice::DrawSprite(x * blockSize, y * blockSize, GoalAnimTex[animCounter4], 1, 1, 0.0f, WHITE);
 						}
 
 					}
