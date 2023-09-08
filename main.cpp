@@ -12,14 +12,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	char keys[256] = {0};
 	char preKeys[256] = {0};
 
-	int playerPosx = 0;
-	int playerPosy = 64;
+	//赤
+	int playerPosx = 32;
+	int playerPosy = 32;
 	int xP, yP;
 	int xPtmp = 0, yPtmp = 0;
-	int PlayerSpeed = 32;
+	int PlayerSpeedX = 32;
+	int PlayerSpeedY = 32;
 	int posPXtmp = 0;
 	int posPYtmp = 0;
 	int isPlayerAlive = 1;
+
 
 	//タイトルフレーム
 	int animCounter = 0;
@@ -29,9 +32,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int animCounter2 = 0;
 	int frameCounter2 = 0;
 
+	//ゴールフレーム
+	int animCounter3 = 0;
+	int frameCounter3 = 0;
 
-	int player2Posx = 32;
-	int player2Posy = 64;
+	//青
+	int player2Posx = 64;
+	int player2Posy = 576;
 	int xP2, yP2;
 	int xPtmp2 = 0, yPtmp2 = 0;
 	//int PlayerSpeed2 = 16;
@@ -39,39 +46,49 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int posP2Ytmp = 0;
 	int isPlayerAlive2 = 1;
 
+	//緑
+	int player3Posx = 640;
+	int player3Posy = 288;
+	int xP3 = 0, yP3 = 0;
+	int xPtmp3 = 0, yPtmp3 = 0;
+	//int PlayerSpeed2 = 16;
+	int posP3Xtmp = 0;
+	int posP3Ytmp = 0;
+	int isPlayerAlive3 = 1;
+
+	int GOALFlag = 0;
+
 	int blockSize = 32;
 	int map[20][25]{
-	{ 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
-	{ 1,1,1,1,1,1,1,1,1,5,0,0,0,0,0,5,1,1,1,1,1,1,1,1,1 },
-	{ 0,0,0,0,0,0,0,0,0,4,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1 },
-	{ 1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1 },
-	{ 1,1,1,1,1,1,1,1,1,0,0,2,0,0,0,0,1,1,1,1,1,1,1,1,1 },
-	{ 1,1,1,1,1,1,1,1,1,0,3,0,0,0,0,0,1,1,1,1,1,1,1,1,1 },
-	{ 1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1 },
-	{ 1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1 },
-	{ 1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1 },
-	{ 1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1 },
-	{ 1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1 },
-	{ 1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1 },
-	{ 1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1 },
-	{ 1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1 },
-	{ 1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1 },
-	{ 1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1 },
-	{ 1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1 },
-	{ 1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1 },
-	{ 1,1,1,1,1,1,1,1,1,5,0,0,0,1,0,5,1,1,1,1,1,1,1,1,1 },
-	{ 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
+	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+	{1,0,0,0,0,0,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,1,1},
+	{1,1,1,1,1,0,0,0,1,0,1,0,0,0,0,0,0,1,1,0,0,0,0,1,1},
+	{1,1,0,0,0,0,1,0,1,1,1,0,0,1,1,1,0,0,1,0,1,0,0,1,1},
+	{1,0,0,1,1,0,1,1,0,0,0,0,1,0,1,0,0,0,1,1,0,0,1,1,1},
+	{1,1,0,1,1,0,0,0,1,1,0,0,0,1,0,0,0,1,0,1,1,0,0,0,1},
+	{1,1,0,0,0,1,1,0,1,1,1,1,0,0,1,0,0,1,0,0,0,0,0,1,1},
+	{1,1,1,1,0,0,0,0,0,1,0,0,0,0,1,1,0,0,0,1,0,1,0,1,1},
+	{1,1,0,1,0,1,1,0,0,1,0,1,0,0,0,1,0,1,0,0,1,0,0,1,1},
+	{1,1,0,0,0,1,0,0,0,0,0,1,1,0,0,1,0,1,1,0,0,0,1,1,1},
+	{1,0,0,1,0,0,1,1,0,1,1,1,0,0,1,0,0,0,1,0,1,0,0,0,1},
+	{1,0,0,0,1,0,1,1,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,1,1},
+	{1,0,0,1,1,0,0,1,0,1,0,0,1,1,1,0,0,1,0,0,1,0,0,1,1},
+	{1,0,1,0,1,1,0,0,1,0,0,1,0,0,0,0,0,0,1,1,1,1,0,1,1},
+	{1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,1},
+	{1,0,1,0,0,0,1,0,1,0,1,0,1,0,0,0,0,0,1,1,1,0,0,0,1},
+	{1,1,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1,0,1,0,1,1,0,0,1},
+	{1,1,0,1,1,0,0,1,0,0,0,0,1,0,1,0,0,0,0,0,1,1,0,1,1},
+	{1,1,0,0,1,0,0,1,0,0,1,0,1,1,2,2,2,1,0,0,0,1,1,1,1},
+	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
 	};
+
 	int mapCountX = sizeof(map[0]) / sizeof(map[0][0]);
 	int mapCountY = sizeof(map) / sizeof(map[0]);
 	enum MapInfo
 	{
 		BG,
 		BLOCK,
-		REDBG,
-		BLUEBG,
-		diagonal,
-		STRAIGHT,
+		GOAL
 	};
 
 
@@ -91,9 +108,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int Haikei = Novice::LoadTexture("./image/BgTex.png");
 
 	//ゴールエフェクト画像
-	int GoalEfect1 = Novice::LoadTexture("./image/GoalEfect1.png");
-	int GoalEfect2 = Novice::LoadTexture("./image/GoalEfect2.png");
-	int GoalEfect3 = Novice::LoadTexture("./image/GoalEfect3.png");
+	int GoalAnimTex[3] = {
+	Novice::LoadTexture("./image/GoalEfect1.png"),
+	Novice::LoadTexture("./image/GoalEfect2.png"),
+	Novice::LoadTexture("./image/GoalEfect3.png"),
+	};
 
 	//プレイヤー画像
 	int RedPlayer = Novice::LoadTexture("./image/RedPlayer.png");
@@ -189,13 +208,22 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		case game:
 
+			frameCounter3++;
+			if (frameCounter3 % 10 == 0) {
+				animCounter3++;
+			}
+
+			if (animCounter3 >= 3) {
+				animCounter3 = 0;
+			}
+
 			//背景画像
 			Novice::DrawSprite(0, 0, Haikei, 1, 1, 0.0f, WHITE);
 
 			//ゴールエフェクト(エラー対策の仮置き)
-			Novice::DrawSprite(0, 0, GoalEfect1, 1, 1, 0.0f, WHITE);
+			/*Novice::DrawSprite(0, 0, GoalEfect1, 1, 1, 0.0f, WHITE);
 			Novice::DrawSprite(32, 0, GoalEfect2, 1, 1, 0.0f, WHITE);
-			Novice::DrawSprite(64, 0, GoalEfect3, 1, 1, 0.0f, WHITE);
+			Novice::DrawSprite(64, 0, GoalEfect3, 1, 1, 0.0f, WHITE);*/
 			
 			xP = playerPosx / blockSize;
 			yP = playerPosy / blockSize;
@@ -203,129 +231,262 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			xP2 = player2Posx / blockSize;
 			yP2 = player2Posy / blockSize;
 
+			xP3 = player3Posx / blockSize;
+			yP3 = player3Posy / blockSize;
+
+			if (map[yP][xP] == GOAL && map[yP2][xP2] == GOAL && map[yP3][xP3]) {
+
+				GOALFlag = 1;
+
+			}
+
 
 			if (keys[DIK_A] && preKeys[DIK_A] == 0) {
-				posPXtmp = playerPosx - PlayerSpeed;
+				posPXtmp = playerPosx - PlayerSpeedX;
 				xPtmp = xP;
 				yPtmp = yP;
 				xPtmp = posPXtmp / blockSize;
 
-				posP2Xtmp = player2Posx - PlayerSpeed;
+				posP2Xtmp = player2Posx - PlayerSpeedX;
 				xPtmp2 = xP2;
 				yPtmp2 = yP2;
 				xPtmp2 = posP2Xtmp / blockSize;
 
+				posP3Xtmp = player3Posx - PlayerSpeedX;
+				xPtmp3 = xP3;
+				yPtmp3 = yP3;
+				xPtmp3 = posP3Xtmp / blockSize;
+
+
 				if (map[yPtmp][xPtmp] != BLOCK) {
-					playerPosx -= PlayerSpeed;
+					playerPosx -= PlayerSpeedX;
 				}
+
+				//1が2に左から当たる
 				if (xPtmp2 + 1 == xPtmp && playerPosy == player2Posy) {
-					playerPosx += PlayerSpeed;
+					playerPosx += PlayerSpeedX;
 				}
 
 
 				if (map[yPtmp2][xPtmp2] != BLOCK) {
-					player2Posx -= PlayerSpeed;
+					player2Posx -= PlayerSpeedX;
 				}
 
+				//2が１に左から当たる
 				if (xPtmp2 == xPtmp + 1 && playerPosy == player2Posy) {
-					player2Posx += PlayerSpeed;
+					player2Posx += PlayerSpeedX;
 
 				}
+
+				if (map[yPtmp3][xPtmp3] != BLOCK) {
+					player3Posx -= PlayerSpeedX;
+				}
+
+				//1が3に左から当たる
+				if (xPtmp3 + 1 == xPtmp && player3Posy == playerPosy) {
+					playerPosx += PlayerSpeedX;
+				}
+
+				//3が1に左から当たる
+				if (xPtmp3 == xPtmp + 1 && player3Posy == playerPosy) {
+					player3Posx += PlayerSpeedX;
+				}
+				//2が3に左から当たる
+				if (xPtmp3 + 1 == xPtmp2 && player3Posy == player2Posy) {
+					player2Posx += PlayerSpeedX;
+				}
+				//3が２に左から当たる
+				if (xPtmp3 == xPtmp2 + 1 && player3Posy == player2Posy) {
+					player3Posx += PlayerSpeedX;
+				}
+
 			}
 
 			if (keys[DIK_W] && preKeys[DIK_W] == 0) {
-				posPYtmp = playerPosy - PlayerSpeed;
+				posPYtmp = playerPosy - PlayerSpeedY;
 				xPtmp = xP;
 				yPtmp = yP;
 				yPtmp = posPYtmp / blockSize;
 
-				posP2Ytmp = player2Posy - PlayerSpeed;
+				posP2Ytmp = player2Posy - PlayerSpeedY;
 				xPtmp2 = xP2;
 				yPtmp2 = yP2;
 				yPtmp2 = posP2Ytmp / blockSize;
 
+				posP3Ytmp = player3Posy - PlayerSpeedY;
+				xPtmp3 = xP3;
+				yPtmp3 = yP3;
+				yPtmp3 = posP3Ytmp / blockSize;
 
 				//上
 				if (map[yPtmp][xPtmp] != BLOCK) {
-					playerPosy -= PlayerSpeed;
+					playerPosy -= PlayerSpeedY;
 				}
 
+				//1が2に上から当たる
 				if (yPtmp2 + 1 == yPtmp && playerPosx == player2Posx) {
-					playerPosy += PlayerSpeed;
+					playerPosy += PlayerSpeedY;
 				}
 
 				if (map[yPtmp2][xPtmp2] != BLOCK) {
-					player2Posy -= PlayerSpeed;
+					player2Posy -= PlayerSpeedY;
+				}
+				//2が1に上から当たる
+				if (yPtmp2 == yPtmp + 1 && playerPosx == player2Posx) {
+					player2Posy += PlayerSpeedY;
 				}
 
-				if (yPtmp2 == yPtmp + 1 && playerPosx == player2Posx) {
-					player2Posy += PlayerSpeed;
+				if (map[yPtmp3][xPtmp3] != BLOCK) {
+					player3Posy -= PlayerSpeedY;
+				}
+
+				//1が3に上から当たる
+				if (yPtmp3 + 1 == yPtmp && playerPosx == player3Posx) {
+					playerPosy += PlayerSpeedY;
+				}
+
+				//3が１に上から当たる
+				if (yPtmp + 1 == yPtmp3 && playerPosx == player2Posx) {
+					player3Posy += PlayerSpeedY;
+				}
+
+				//2が3に上から当たる
+				if (yPtmp2 == yPtmp3 + 1 && player3Posx == player2Posx) {
+					player2Posy += PlayerSpeedY;
+				}
+
+				//3が2に上から当たる
+				if (yPtmp2 + 1 == yPtmp3 && player3Posx == player2Posx) {
+					player3Posy += PlayerSpeedY;
 				}
 
 			}
 
 			if (keys[DIK_S] && preKeys[DIK_S] == 0) {
-				posPYtmp = playerPosy + PlayerSpeed;
+				posPYtmp = playerPosy + PlayerSpeedY;
 				xPtmp = xP;
 				yPtmp = yP;
 				yPtmp = posPYtmp / blockSize;
 
-				posP2Ytmp = player2Posy + PlayerSpeed;
+				posP2Ytmp = player2Posy + PlayerSpeedY;
 				xPtmp2 = xP2;
 				yPtmp2 = yP2;
 				yPtmp2 = posP2Ytmp / blockSize;
 
+				posP3Ytmp = player3Posy + PlayerSpeedY;
+				xPtmp3 = xP3;
+				yPtmp3 = yP3;
+				yPtmp3 = posP3Ytmp / blockSize;
 				//下
 				if (map[yPtmp][xPtmp] != BLOCK) {
-					playerPosy += PlayerSpeed;
+					playerPosy += PlayerSpeedY;
 				}
-
+				//1が2に下から当たる
 				if (yPtmp2 - 1 == yPtmp && playerPosx == player2Posx) {
-					playerPosy -= PlayerSpeed;
+					playerPosy -= PlayerSpeedY;
 				}
 
 				if (map[yPtmp2][xPtmp2] != BLOCK) {
-					player2Posy += PlayerSpeed;
+					player2Posy += PlayerSpeedY;
+				}
+				//2が1に下から当たる
+				if (yPtmp2 == yPtmp - 1 && playerPosx == player2Posx) {
+					player2Posy -= PlayerSpeedY;
 				}
 
-				if (yPtmp2 == yPtmp - 1 && playerPosx == player2Posx) {
-					player2Posy -= PlayerSpeed;
+				if (map[yPtmp3][xPtmp3] != BLOCK) {
+					player3Posy += PlayerSpeedY;
 				}
+
+				//1が3に下から当たる
+				if (yPtmp3 - 1 == yPtmp && playerPosx == player3Posx) {
+					playerPosy -= PlayerSpeedY;
+				}
+
+				//3が1に下から当たる
+				if (yPtmp - 1 == yPtmp3 && playerPosx == player3Posx) {
+					player3Posy -= PlayerSpeedY;
+				}
+
+				//2が3に下から当たる
+				if (yPtmp2 == yPtmp3 - 1 && player3Posx == player2Posx) {
+					player2Posy -= PlayerSpeedY;
+				}
+
+				//3が2に下から当たる
+				if (yPtmp3 == yPtmp2 - 1 && player3Posx == player2Posx) {
+					player3Posy -= PlayerSpeedY;
+				}
+
 			}
 
 			/// 
 			if (keys[DIK_D] && preKeys[DIK_D] == 0) {
-				posPXtmp = playerPosx + PlayerSpeed;
+				posPXtmp = playerPosx + PlayerSpeedX;
 				xPtmp = xP;
 				yPtmp = yP;
 				xPtmp = posPXtmp / blockSize;
 
-				posP2Xtmp = player2Posx + PlayerSpeed;
+				posP2Xtmp = player2Posx + PlayerSpeedX;
 				xPtmp2 = xP2;
 				yPtmp2 = yP2;
 				xPtmp2 = posP2Xtmp / blockSize;
 
-
+				posP3Xtmp = player3Posx + PlayerSpeedX;
+				xPtmp3 = xP3;
+				yPtmp3 = yP3;
+				xPtmp3 = posP3Xtmp / blockSize;
 
 				//右
 				if (map[yPtmp][xPtmp] != BLOCK) {
-					playerPosx += PlayerSpeed;
+					playerPosx += PlayerSpeedX;
 
 				}
+				//1が2に右に当たる
 				if (xPtmp == xPtmp2 - 1 && playerPosy == player2Posy) {
-					playerPosx -= PlayerSpeed;
+					playerPosx -= PlayerSpeedX;
 				}
 
 				if (map[yPtmp2][xPtmp2] != BLOCK) {
-					player2Posx += PlayerSpeed;
+					player2Posx += PlayerSpeedX;
 				}
+
+				//2が1に右に当たる
 				if (xPtmp - 1 == xPtmp2 && playerPosy == player2Posy) {
-					player2Posx -= PlayerSpeed;
+					player2Posx -= PlayerSpeedX;
 				}
+
+				if (map[yPtmp3][xPtmp3] != BLOCK) {
+					player3Posx += PlayerSpeedX;
+				}
+
+				//3が1に右から当たる
+				if (xPtmp3 == xPtmp - 1 && player3Posy == playerPosy) {
+					player3Posx -= PlayerSpeedX;
+				}
+
+				//１が３に右に当たる
+				if (xPtmp3 - 1 == xPtmp && playerPosy == player3Posy) {
+					playerPosx -= PlayerSpeedX;
+				}
+
+				//３が１に右から当たる
+				if (xPtmp3 == xPtmp2 - 1 && player3Posy == player2Posy) {
+					player3Posx -= PlayerSpeedX;
+				}
+
+				//２が３に右からあたる
+				if (xPtmp3 - 1 == xPtmp2 && player3Posy == player2Posy) {
+					player2Posx -= PlayerSpeedX;
+				}
+
 			}
 
-			Novice::ScreenPrintf(0, 0, "%d,%d", yPtmp, xPtmp);
+			/*Novice::ScreenPrintf(0, 0, "%d,%d", yPtmp, xPtmp);
 			Novice::ScreenPrintf(0, 50, "%d,%d", yPtmp2, xPtmp2);
+			Novice::ScreenPrintf(0, 100, "%d,%d", yPtmp3, xPtmp3);
+			Novice::ScreenPrintf(0, 150, "%d,%d", yP3, xP3);
+			Novice::ScreenPrintf(0, 200, "%d", GOALFlag);*/
 
 
 		///
@@ -337,18 +498,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					if (map[y][x] == BLOCK) {
 						Novice::DrawSprite(x* blockSize, y* blockSize, WallTex, 1, 1, 0.0f, WHITE);
 					}
-					if (map[y][x] == diagonal) {
-						Novice::DrawBox(x * blockSize, y * blockSize, 32, 32, 0.0f, 0xFFFF00FF, kFillModeSolid);
-					}
-					if (map[y][x] == REDBG) {
-						Novice::DrawBox(x * blockSize, y * blockSize, 32, 32, 0.0f, RED, kFillModeSolid);
-					}
-					if (map[y][x] == BLUEBG) {
-						Novice::DrawBox(x * blockSize, y * blockSize, 32, 32, 0.0f, BLUE, kFillModeSolid);
+					if (map[y][x] == GOAL) {
+						Novice::DrawSprite(x* blockSize, y* blockSize, GoalAnimTex[animCounter3], 1, 1, 0.0f, WHITE);
 					}
 
 				}
 			}
+
 
 			if (isPlayerAlive == 1) {
 				Novice::DrawSprite(playerPosx, playerPosy, RedPlayer, 1, 1, 0.0f, WHITE);
@@ -358,8 +514,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				Novice::DrawSprite(player2Posx, player2Posy, BluePlayer, 1, 1, 0.0f, WHITE);
 			}
 
-			//三体目の自機
-			Novice::DrawSprite(0, 0, GreenPlayer, 1, 1, 0.0f, WHITE);
+			if (isPlayerAlive3 == 1) {
+				Novice::DrawSprite(player3Posx, player3Posy, GreenPlayer, 1, 1, 0.0f, WHITE);
+			}
+			
 
 		///
 		/// ↑描画処理ここまで
