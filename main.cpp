@@ -156,7 +156,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		case title:
 
 			frameCounter++;
-			if (frameCounter % 5 == 0) {
+			if (frameCounter % 10 == 0) {
 				animCounter++;
 			}
 
