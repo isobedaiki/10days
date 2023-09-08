@@ -191,6 +191,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//壁ブロックの画像
 	int WallTex = Novice::LoadTexture("./image/WallTex.png");
 
+	//サウンド読み込み
+	int Botan = Novice::LoadAudio("./image/Botan.mp3");
+
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
 		// フレームの開始
@@ -223,6 +226,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//シーン切り替え
 			if (keys[DIK_SPACE] != 0 && preKeys[DIK_SPACE] == 0) {
 				scene = setumei;
+				Novice::PlayAudio(Botan, 0, 1);
 				frameCounter = 0;
 			}
 
@@ -236,6 +240,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//シーン切り替え
 			if (keys[DIK_SPACE] != 0 && preKeys[DIK_SPACE] == 0) {
 				scene = game;
+				Novice::PlayAudio(Botan, 0, 1);
 			}
 
 			break;
@@ -1037,6 +1042,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//シーン切り替え
 			if (keys[DIK_SPACE] != 0 && preKeys[DIK_SPACE] == 0) {
 				scene = title;
+				Novice::PlayAudio(Botan, 0, 1);
 			}
 
 			break;
