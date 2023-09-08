@@ -107,6 +107,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//背景画像
 	int Haikei = Novice::LoadTexture("./image/BgTex.png");
 
+	//説明画像
+	int MovesList = Novice::LoadTexture("./image/MovesList.png");
+
 	//ゴールエフェクト画像
 	int GoalAnimTex[3] = {
 	Novice::LoadTexture("./image/GoalEfect1.png"),
@@ -197,7 +200,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		case setumei:
 
 			//説明画像
-			Novice::DrawBox(0, 0, 800, 640, 0.0f, BLUE, kFillModeSolid);
+			Novice::DrawSprite(0, 0, MovesList, 1, 1, 0.0f, WHITE);
 
 			//シーン切り替え
 			if (keys[DIK_SPACE] != 0 && preKeys[DIK_SPACE] == 0) {
