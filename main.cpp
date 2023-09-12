@@ -195,8 +195,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//サウンド読み込み
 	int Botan = Novice::LoadAudio("./image/Botan.mp3");
 
-	int Reset = Novice::LoadAudio("./image/reset.mp3");
-
 	int MBGM = Novice::LoadAudio("./image/MapMusicLoop.mp3");
 
 	int BGMPlayFlag = -1;
@@ -272,8 +270,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 			if (keys[DIK_R] && preKeys[DIK_R] == 0) {
-
-				Novice::PlayAudio(Reset, 0, 0);
 
 				//赤
 				playerPosx = 32;
