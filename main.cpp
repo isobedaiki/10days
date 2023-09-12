@@ -60,6 +60,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	int GOALFlag = 0;
 
+
 	int blockSize = 32;
 	int map[20][25]{
 	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
@@ -194,6 +195,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//サウンド読み込み
 	int Botan = Novice::LoadAudio("./image/Botan.mp3");
 
+	int Reset = Novice::LoadAudio("./image/reset.mp3");
+
+	int MBGM = Novice::LoadAudio("./image/MapMusicLoop.mp3");
+
+	int BGMPlayFlag = -1;
+
+
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
 		// フレームの開始
@@ -207,6 +215,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓更新処理ここから
 		///
 
+		if (Novice::IsPlayingAudio(BGMPlayFlag) == 0 || BGMPlayFlag == -1) {
+			BGMPlayFlag = Novice::PlayAudio(MBGM, 1, 1);
+		}
 
 		switch (scene) {
 		case title:
@@ -259,7 +270,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//背景画像
 			Novice::DrawSprite(0, 0, Haikei, 1, 1, 0.0f, WHITE);
 
+
 			if (keys[DIK_R] && preKeys[DIK_R] == 0) {
+
+				Novice::PlayAudio(Reset, 0, 0);
 
 				//赤
 				playerPosx = 32;
@@ -291,7 +305,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				isPlayerAlive3 = 1;
 
 				GOALFlag = 0;
-			
 			}
 
 
@@ -423,7 +436,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 
 				//3が１に上から当たる
-				if (yPtmp + 1 == yPtmp3 && playerPosx == player2Posx) {
+				if (yPtmp + 1 == yPtmp3 && playerPosx == player3Posx) {
 					player3Posy += PlayerSpeedY;
 				}
 
@@ -626,11 +639,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				isPlayerAlive3 = 1;
 
 				
+				BGMPlayFlag = -1;
 
 				scene = game2;
-
-				
-
 
 
 			}
@@ -806,7 +817,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					}
 
 					//3が１に上から当たる
-					if (yPtmp + 1 == yPtmp3 && playerPosx == player2Posx) {
+					if (yPtmp + 1 == yPtmp3 && playerPosx == player3Posx) {
 						player3Posy += PlayerSpeedY;
 					}
 
