@@ -1001,8 +1001,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					animCounter2++;
 				}
 
-				if (animCounter2 >= 11) {
-					animCounter2 = 11;
+				if (animCounter2 >= 12) {
+					animCounter2 = 0;
 				}
 				
 			
